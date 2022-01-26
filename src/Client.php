@@ -1,10 +1,10 @@
 <?php
 
-namespace ChrisWhite\B2;
+namespace johndelson\B2;
 
-use ChrisWhite\B2\Exceptions\NotFoundException;
-use ChrisWhite\B2\Exceptions\ValidationException;
-use ChrisWhite\B2\Http\Client as HttpClient;
+use johndelson\B2\Exceptions\NotFoundException;
+use johndelson\B2\Exceptions\ValidationException;
+use johndelson\B2\Http\Client as HttpClient;
 
 class Client
 {

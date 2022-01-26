@@ -1,14 +1,14 @@
 <?php
 
-namespace ChrisWhite\B2;
+namespace johndelson\B2;
 
-use ChrisWhite\B2\Exceptions\B2Exception;
-use ChrisWhite\B2\Exceptions\BadJsonException;
-use ChrisWhite\B2\Exceptions\BadValueException;
-use ChrisWhite\B2\Exceptions\BucketAlreadyExistsException;
-use ChrisWhite\B2\Exceptions\NotFoundException;
-use ChrisWhite\B2\Exceptions\FileNotPresentException;
-use ChrisWhite\B2\Exceptions\BucketNotEmptyException;
+use johndelson\B2\Exceptions\B2Exception;
+use johndelson\B2\Exceptions\BadJsonException;
+use johndelson\B2\Exceptions\BadValueException;
+use johndelson\B2\Exceptions\BucketAlreadyExistsException;
+use johndelson\B2\Exceptions\NotFoundException;
+use johndelson\B2\Exceptions\FileNotPresentException;
+use johndelson\B2\Exceptions\BucketNotEmptyException;
 use GuzzleHttp\Psr7\Response;
 
 class ErrorHandler

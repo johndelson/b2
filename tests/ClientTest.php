@@ -1,16 +1,16 @@
 <?php
 
-namespace ChrisWhite\B2\Tests;
+namespace johndelson\B2\Tests;
 
-use ChrisWhite\B2\Client;
-use ChrisWhite\B2\Bucket;
-use ChrisWhite\B2\Exceptions\BadValueException;
-use ChrisWhite\B2\Exceptions\BucketNotEmptyException;
-use ChrisWhite\B2\Exceptions\NotFoundException;
-use ChrisWhite\B2\File;
-use ChrisWhite\B2\Exceptions\BucketAlreadyExistsException;
-use ChrisWhite\B2\Exceptions\BadJsonException;
-use ChrisWhite\B2\Exceptions\ValidationException;
+use johndelson\B2\Client;
+use johndelson\B2\Bucket;
+use johndelson\B2\Exceptions\BadValueException;
+use johndelson\B2\Exceptions\BucketNotEmptyException;
+use johndelson\B2\Exceptions\NotFoundException;
+use johndelson\B2\File;
+use johndelson\B2\Exceptions\BucketAlreadyExistsException;
+use johndelson\B2\Exceptions\BadJsonException;
+use johndelson\B2\Exceptions\ValidationException;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Stream;
 

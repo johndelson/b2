@@ -1,6 +1,6 @@
 <?php
 
-namespace ChrisWhite\B2\Exceptions;
+namespace johndelson\B2\Exceptions;
 
 class B2Exception extends \Exception
 {

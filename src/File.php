@@ -1,6 +1,6 @@
 <?php
 
-namespace ChrisWhite\B2;
+namespace johndelson\B2;
 
 class File
 {

@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ChrisWhite\\B2\\": "src/"
+            "johndelson\\B2\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ChrisWhite\\B2\\Tests\\": "tests/"
+            "johndelson\\B2\\Tests\\": "tests/"
         }
     }
 }
