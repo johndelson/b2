@@ -7,13 +7,20 @@
 `b2-sdk-php` is a client library for working with Backblaze's B2 storage service. It aims to make using the service as
 easy as possible by exposing a clear API and taking influence from other SDKs that you may be familiar with.
 
+## Installation
+
+Installation is via Composer:
+
+```bash
+$ composer require johndelson/b2
+```
 ## Example
 
 This is just a short example, full examples to come on the wiki.
 
 ```php
-use ChrisWhite\B2\Client;
-use ChrisWhite\B2\Bucket;
+use johndelson\B2\Client;
+use johndelson\B2\Bucket;
 
 $client = new Client('applicationKeyId', 'applicationKey');
 
@@ -71,13 +78,6 @@ $fileList = $client->listFiles([
 ]);
 ```
 
-## Installation
-
-Installation is via Composer:
-
-```bash
-$ composer require johndelson/b2
-```
 
 ## Tests
 
