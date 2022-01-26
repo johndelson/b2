@@ -1,15 +1,15 @@
 {
-    "name": "cwhite92/b2-sdk-php",
+    "name": "johndelson/b2",
     "description": "A SDK for working with B2 cloud storage.",
     "keywords": ["b2", "storage", "backblaze", "cloud", "filesystem", "backup"],
-    "homepage": "https://github.com/cwhite92/b2-sdk-php",
+    "homepage": "https://github.com/johndelson/b2",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
-            "name": "Chris White",
-            "email": "chris@cwhite.me",
-            "homepage": "https://cwhite.me"
+            "name": "John Ubalde",
+            "email": "masterjd321@gmail.com",
+            "homepage": "https://johndelson.me"
         }
     ],
     "require": {
