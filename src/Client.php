@@ -53,7 +53,7 @@ class Client
             );
         }
 
-        $response = $this->client->request('POST', $this->apiUrl.'/b2_create_bucket', [
+        $response = $this->client->request('POST', $this->apiUrl . '/b2_create_bucket', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -86,7 +86,7 @@ class Client
             $options['BucketId'] = $this->getBucketIdFromName($options['BucketName']);
         }
 
-        $response = $this->client->request('POST', $this->apiUrl.'/b2_update_bucket', [
+        $response = $this->client->request('POST', $this->apiUrl . '/b2_update_bucket', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -109,7 +109,7 @@ class Client
     {
         $buckets = [];
 
-        $response = $this->client->request('POST', $this->apiUrl.'/b2_list_buckets', [
+        $response = $this->client->request('POST', $this->apiUrl . '/b2_list_buckets', [
             'headers' => [
                 'Authorization' => $this->authToken,
             ],
@@ -137,7 +137,7 @@ class Client
             $options['BucketId'] = $this->getBucketIdFromName($options['BucketName']);
         }
 
-        $this->client->request('POST', $this->apiUrl.'/b2_delete_bucket', [
+        $this->client->request('POST', $this->apiUrl . '/b2_delete_bucket', [
             'headers' => [
                 'Authorization' => $this->authToken
             ],
@@ -168,7 +168,7 @@ class Client
         }
 
         // Retrieve the URL that we should be uploading to.
-        $response = $this->client->request('POST', $this->apiUrl.'/b2_get_upload_url', [
+        $response = $this->client->request('POST', $this->apiUrl . '/b2_get_upload_url', [
             'headers' => [
                 'Authorization' => $this->authToken
             ],
@@ -188,7 +188,7 @@ class Client
 
             // Similarly, we have to use fstat to get the size of the stream.
             $size = fstat($options['Body'])['size'];
-            
+
             // Rewind the stream before passing it to the HTTP client.
             rewind($options['Body']);
         } else {
@@ -245,7 +245,7 @@ class Client
 
         if (isset($options['FileId'])) {
             $requestOptions['query'] = ['fileId' => $options['FileId']];
-            $requestUrl = $this->downloadUrl.'/b2api/v1/b2_download_file_by_id';
+            $requestUrl = $this->downloadUrl . '/b2api/v1/b2_download_file_by_id';
         } else {
             if (!isset($options['BucketName']) && isset($options['BucketId'])) {
                 $options['BucketName'] = $this->getBucketNameFromId($options['BucketId']);
@@ -269,7 +269,8 @@ class Client
     {
         // if FileName is set, we only attempt to retrieve information about that single file.
         $fileName = !empty($options['FileName']) ? $options['FileName'] : null;
-
+        $returnType = !empty($options['ReturnType']) ? $options['ReturnType'] : null;
+        $type = !empty($options['Versions']) ?? ($options['Versions']) ? '/b2_list_file_versions' : '/b2_list_file_names';
         $nextFileName = null;
         $maxFileCount = 1000;
         $files = [];
@@ -280,26 +281,41 @@ class Client
 
         if ($fileName) {
             $nextFileName = $fileName;
-            $maxFileCount = 1;
+            $maxFileCount = $options['PerPage'] ?? 1;
         }
+        $jsonData = [
+            'bucketId' => $options['BucketId'],
+            'startFileName' => $nextFileName,
+            'maxFileCount' => $maxFileCount,
+            'prefix' => $options['Prefix'] ?? null,
+            'delimiter' => $options['Delimiter'] ?? null,
+        ];
+
+
 
         // B2 returns, at most, 1000 files per "page". Loop through the pages and compile an array of File objects.
         while (true) {
-            $response = $this->client->request('POST', $this->apiUrl.'/b2_list_file_names', [
+            $response = $this->client->request('POST', $this->apiUrl . $type, [
                 'headers' => [
                     'Authorization' => $this->authToken
                 ],
-                'json' => [
-                    'bucketId' => $options['BucketId'],
-                    'startFileName' => $nextFileName,
-                    'maxFileCount' => $maxFileCount,
-                ]
+                'json' => $jsonData
             ]);
 
             foreach ($response['files'] as $file) {
+
                 // if we have a file name set, only retrieve information if the file name matches
                 if (!$fileName || ($fileName === $file['fileName'])) {
-                    $files[] = new File($file['fileId'], $file['fileName'], null, $file['size'], $file['type'], $file['info'], $file['bucketId'], $file['action'], $file['uploadTimestamp']);
+                    $fileData = $returnType == 'file' ? new File($file) : $file;
+                    if (isset($files[$file['fileName']]) && $options['Versions']) {
+                        if ($returnType == 'file') {
+                            $files[$file['fileName']]->setVersions($file);
+                        } else {
+                            $files[$file['fileName']]['Versions'][$file['fileName']] = $file;
+                        }
+                    } else {
+                        $files[$file['fileName']] = $fileData;
+                    }
                 }
             }
 
@@ -345,7 +361,7 @@ class Client
             }
         }
 
-        $response = $this->client->request('POST', $this->apiUrl.'/b2_get_file_info', [
+        $response = $this->client->request('POST', $this->apiUrl . '/b2_get_file_info', [
             'headers' => [
                 'Authorization' => $this->authToken
             ],
@@ -387,7 +403,7 @@ class Client
             $options['FileId'] = $file->getId();
         }
 
-        $this->client->request('POST', $this->apiUrl.'/b2_delete_file_version', [
+        $this->client->request('POST', $this->apiUrl . '/b2_delete_file_version', [
             'headers' => [
                 'Authorization' => $this->authToken
             ],
@@ -412,7 +428,7 @@ class Client
         ]);
 
         $this->authToken = $response['authorizationToken'];
-        $this->apiUrl = $response['apiUrl'].'/b2api/v1';
+        $this->apiUrl = $response['apiUrl'] . '/b2api/v1';
         $this->downloadUrl = $response['downloadUrl'];
     }
 

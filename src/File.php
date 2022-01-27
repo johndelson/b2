@@ -6,6 +6,7 @@ class File
 {
     protected $id;
     protected $name;
+    protected $versions;
     protected $hash;
     protected $size;
     protected $type;
@@ -17,27 +18,27 @@ class File
     /**
      * File constructor.
      *
-     * @param $id
-     * @param $name
-     * @param $hash
-     * @param $size
-     * @param $type
-     * @param $info
-     * @param $bucketId
-     * @param $action
-     * @param $uploadTimestamp
+     * @param array $args
      */
-    public function __construct($id, $name, $hash = null, $size = null, $type = null, $info = null, $bucketId = null, $action = null, $uploadTimestamp = null)
+    public function __construct($args)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->hash = $hash;
-        $this->size = $size;
-        $this->type = $type;
-        $this->info = $info;
-        $this->bucketId = $bucketId;
-        $this->action = $action;
-        $this->uploadTimestamp = $uploadTimestamp;
+        if (isset($args['fileName']) && strpos($args['fileName'], '/')) {
+            $args['fileInfo'] = array_merge(pathinfo($args['fileName']), $args['fileInfo']);
+        }
+        $this->id = $args['fileId'] ?? null;
+        $this->name = $args['fileName'] ?? null;
+        $this->uploadTimestamp = isset($args['uploadTimestamp']) ? $args['uploadTimestamp'] / 1000 : null;
+        $this->info = $args['fileInfo'] ?? null;
+        $this->size = $args['size'] ?? null;
+
+        if (!isset($args['version'])) {
+            $this->versions = [];
+            $this->hash = $args['contentSha1'] ?? null;            
+            $this->type = $args['contentType'] ?? null;            
+            $this->bucketId = $args['bucketId'] ?? null;
+            $this->action = $args['action'] ?? null;
+        }
+        
     }
 
     /**
@@ -54,6 +55,23 @@ class File
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersions()
+    {
+        return $this->versions;
+    }
+
+    /**
+     * @return string
+     */
+    public function setVersions(array $file)
+    {
+        $file['version'] = $file['uploadTimestamp'];
+        $this->versions[$file['version']] = new File($file);
     }
 
     /**
